@@ -1,0 +1,233 @@
+﻿USE [master]
+GO
+/****** Object:  Database [hcautomapper]    Script Date: 2021-08-30 12:46:29 PM ******/
+CREATE DATABASE [hcautomapper]
+GO
+
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [hcautomapper].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+
+ALTER DATABASE [hcautomapper] SET ANSI_NULL_DEFAULT OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET ANSI_NULLS OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET ANSI_PADDING OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET ANSI_WARNINGS OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET ARITHABORT OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET AUTO_CLOSE OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET AUTO_SHRINK OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET AUTO_UPDATE_STATISTICS ON 
+GO
+
+ALTER DATABASE [hcautomapper] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET CURSOR_DEFAULT  GLOBAL 
+GO
+
+ALTER DATABASE [hcautomapper] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET NUMERIC_ROUNDABORT OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET QUOTED_IDENTIFIER OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET RECURSIVE_TRIGGERS OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET  DISABLE_BROKER 
+GO
+
+ALTER DATABASE [hcautomapper] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET TRUSTWORTHY OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET PARAMETERIZATION SIMPLE 
+GO
+
+ALTER DATABASE [hcautomapper] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET HONOR_BROKER_PRIORITY OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET RECOVERY FULL 
+GO
+
+ALTER DATABASE [hcautomapper] SET  MULTI_USER 
+GO
+
+ALTER DATABASE [hcautomapper] SET PAGE_VERIFY CHECKSUM  
+GO
+
+ALTER DATABASE [hcautomapper] SET DB_CHAINING OFF 
+GO
+
+ALTER DATABASE [hcautomapper] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+
+ALTER DATABASE [hcautomapper] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+
+ALTER DATABASE [hcautomapper] SET DELAYED_DURABILITY = DISABLED 
+GO
+
+ALTER DATABASE [hcautomapper] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+
+ALTER DATABASE [hcautomapper] SET QUERY_STORE = OFF
+GO
+
+ALTER DATABASE [hcautomapper] SET  READ_WRITE 
+GO
+
+USE [hcautomapper]
+GO
+
+/****** Object:  Table [dbo].[Employment]    Script Date: 2021-08-30 12:29:00 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Employment](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[EmployeeId] [int] NOT NULL,
+	[PositionId] [int] NOT NULL,
+	[FromDate] [date] NOT NULL,
+	[ToDate] [date] NULL,
+	[Description] [varchar](max) NULL,
+	[Guid] [uniqueidentifier] NOT NULL
+ CONSTRAINT [PK_Employment] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Address]    Script Date: 2021-08-30 12:29:00 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Address](
+	[Id] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[UnitId] [int] NOT NULL,
+	[StreetName] [varchar](100) NULL,
+	[StreetNumber] [varchar](5) NULL,
+	[PostalCode] [varchar](10) NULL,
+	[PostalPlace] [varchar](50) NULL,
+	[Guid] [uniqueidentifier] NOT NULL
+ CONSTRAINT [PK_Address] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [UX_Address_Guid] UNIQUE NONCLUSTERED 
+(
+	[Guid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Position]    Script Date: 2021-08-30 12:29:00 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Position](
+	[Id] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[Number] [int] NOT NULL,
+	[Name] [nvarchar](max) NOT NULL,
+	[Description] [nvarchar](max) NULL,
+	[OtherField] [text] NULL
+ CONSTRAINT [PK_Position] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Unit]    Script Date: 2021-08-30 12:29:00 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Unit](
+	[Id] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[Number] [varchar](50) NULL,
+	[Name] [varchar](250) NOT NULL,
+	[Description] [varchar](500) NULL,
+	[Guid] [uniqueidentifier] NOT NULL
+ CONSTRAINT [PK_Unit] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [UNIQUE_Unit_Guid] UNIQUE NONCLUSTERED 
+(
+	[Guid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Person]    Script Date: 2021-08-30 12:29:00 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Person](
+	[UnitId] [int] NOT NULL,
+	[FirstName] [varchar](100) NULL,
+	[LastName] [varchar](100) NULL,
+	[BirthDate] [date] NULL,
+	[Sex] [tinyint] NULL,
+	[Other] [text] NULL
+ CONSTRAINT [PK_Person] PRIMARY KEY CLUSTERED 
+(
+	[UnitId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Employment] ADD  CONSTRAINT [DV_Employment_Guid]  DEFAULT (newid()) FOR [Guid]
+GO
+ALTER TABLE [dbo].[Address] ADD  CONSTRAINT [DV_Address_Guid]  DEFAULT (newid()) FOR [Guid]
+GO
+ALTER TABLE [dbo].[Unit] ADD  CONSTRAINT [DF_Unit_Guid]  DEFAULT (newid()) FOR [Guid]
+GO
+ALTER TABLE [dbo].[Employment]  WITH NOCHECK ADD  CONSTRAINT [FK_Employment_Position] FOREIGN KEY([PositionId])
+REFERENCES [dbo].[Position] ([Id])
+GO
+ALTER TABLE [dbo].[Employment] CHECK CONSTRAINT [FK_Employment_Position]
+GO
+ALTER TABLE [dbo].[Address]  WITH NOCHECK ADD  CONSTRAINT [FK_Address_Unit] FOREIGN KEY([UnitId])
+REFERENCES [dbo].[Unit] ([Id])
+GO
+ALTER TABLE [dbo].[Address] CHECK CONSTRAINT [FK_Address_Unit]
+GO
+ALTER TABLE [dbo].[Person]  WITH NOCHECK ADD  CONSTRAINT [FK_Person_Unit] FOREIGN KEY([UnitId])
+REFERENCES [dbo].[Unit] ([Id])
+GO
+ALTER TABLE [dbo].[Person] CHECK CONSTRAINT [FK_Person_Unit]
+GO
+
+
+
